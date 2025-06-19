@@ -73,7 +73,6 @@
   <input type="number" id="numberInput" class="number-box" placeholder="適当な数値を入れてください">
 </div>
 
-<button id="downloadBtn">画像をダウンロード</button>
 
 <div id="canvas-container"></div>
 
@@ -143,25 +142,14 @@
       container.removeChild(existing);
     }
   }
-
-  // ダウンロード
-  document.getElementById('downloadBtn').addEventListener('click', () => {
-    html2canvas(container).then(canvas => {
-      const link = document.createElement('a');
-      link.download = 'thumbnail.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  html2canvas(container).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'thumbnail.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
   });
-  // 画像表示用ボタン
-  document.getElementById('previewBtn').addEventListener('click', () => {
-    html2canvas(container).then(canvas => {
-      // 既存のプレビューがある場合は削除
-      previewArea.innerHTML = '';
-      previewArea.appendChild(canvas);
-    });
-  });
-</script>
+});
 </script>
 
 </body>
