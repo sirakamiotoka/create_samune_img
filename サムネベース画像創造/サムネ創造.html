@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>サムネ創造</title>
+  <style>
+    #canvas-container {
+      position: relative;
+      width: 1280px;
+      height: 720px;
+      border: 1px solid #ccc;
+      background-color: #eee;
+      overflow: hidden;
+    }
+
+    .layered-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .base-image, .frame-image, .live-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .base-image { z-index: 0; }
+    .frame-image { z-index: 2; filter: hue-rotate(0deg); }
+    .live-image  { z-index: 3; }
+
+    .chara-image {
+      width: 600px;
+      height: 600px;
+      z-index: 1;
+    }
+
+    .number-box {
+      width: 200px;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .input-group {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h3>画像を選択してください：</h3>
+
+<div class="input-group">
+  背景画像: <input type="file" id="backgroundInput" accept="image/*">
+</div>
+<div class="input-group">
+  キャラ画像: <input type="file" id="charaInput" accept="image/*">
+</div>
+<div class="input-group">
+  <label for="numberInput">枠の色を調整:</label>
+  <input type="number" id="numberInput" class="number-box" placeholder="適当な数値を入れてください">
+</div>
+
+<div id="canvas-container"></div>
+
+<script>
+  const container = document.getElementById('canvas-container');
+
+  // 枠
+  const frameImg = new Image();
+  frameImg.src = 'img/枠.png';
+  frameImg.className = 'layered-image frame-image frame-image-instance';
+  container.appendChild(frameImg);
+
+  // ライブ
+  const liveImg = new Image();
+  liveImg.src = 'img/ライブ.png';
+  liveImg.className = 'layered-image live-image';
+  container.appendChild(liveImg);
+
+  // 背景差し替え
+  document.getElementById('backgroundInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    removeExistingImage('base-image');
+
+    const img = new Image();
+    img.onload = () => {
+      img.className = 'layered-image base-image';
+      container.appendChild(img);
+    };
+    img.src = URL.createObjectURL(file);
+  });
+
+  // キャラ画像差し替え
+  document.getElementById('charaInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    removeExistingImage('chara-image');
+
+    const img = new Image();
+    img.onload = () => {
+      img.className = 'layered-image chara-image';
+      img.style.left = '-70px';
+      img.style.top = `${720 - img.naturalHeight - 100}px`;
+      container.appendChild(img);
+    };
+    img.src = URL.createObjectURL(file);
+  });
+
+  // 枠色変更
+  const numberInput = document.getElementById('numberInput');
+  numberInput.addEventListener('input', () => {
+    const hue = parseInt(numberInput.value) || 0;
+    const frame = document.querySelector('.frame-image-instance');
+    if (frame) {
+      frame.style.filter = `hue-rotate(${hue}deg)`;
+    }
+  });
+
+  // 同じクラスの画像を削除
+  function removeExistingImage(className) {
+    const existing = container.querySelector(`.${className}`);
+    if (existing) {
+      container.removeChild(existing);
+    }
+  }
+</script>
+
+</body>
+</html>
