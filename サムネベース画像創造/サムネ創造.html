@@ -153,6 +153,15 @@
       link.click();
     });
   });
+  // 画像表示用ボタン
+  document.getElementById('previewBtn').addEventListener('click', () => {
+    html2canvas(container).then(canvas => {
+      // 既存のプレビューがある場合は削除
+      previewArea.innerHTML = '';
+      previewArea.appendChild(canvas);
+    });
+  });
+</script>
 </script>
 
 </body>
