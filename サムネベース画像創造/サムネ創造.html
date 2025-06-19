@@ -49,6 +49,13 @@
     .input-group {
       margin-bottom: 10px;
     }
+
+    #downloadBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -66,7 +73,11 @@
   <input type="number" id="numberInput" class="number-box" placeholder="適当な数値を入れてください">
 </div>
 
+<button id="downloadBtn">画像をダウンロード</button>
+
 <div id="canvas-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
   const container = document.getElementById('canvas-container');
@@ -132,6 +143,16 @@
       container.removeChild(existing);
     }
   }
+
+  // ダウンロード
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    html2canvas(container).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'thumbnail.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
 </script>
 
 </body>
