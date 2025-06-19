@@ -2,153 +2,173 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>サムネ創造</title>
+  <title>あなたが頼りです。</title>
   <style>
-    #canvas-container {
-      position: relative;
-      width: 1280px;
-      height: 720px;
+    body {
+      font-family: sans-serif;
+    }
+    canvas {
       border: 1px solid #ccc;
-      background-color: #eee;
-      overflow: hidden;
+      display: block;
     }
-
-    .layered-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    .base-image, .frame-image, .live-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-
-    .base-image { z-index: 0; }
-    .frame-image { z-index: 2; filter: hue-rotate(0deg); }
-    .live-image  { z-index: 3; }
-
-    .chara-image {
-      width: 600px;
-      height: 600px;
-      z-index: 1;
-    }
-
     .number-box {
       width: 200px;
       padding: 10px;
       font-size: 16px;
-      border: 2px solid #ccc;
-      border-radius: 5px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
       margin-top: 10px;
     }
-
     .input-group {
       margin-bottom: 10px;
-    }
-
-    #downloadBtn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<h3>画像を選択してください：</h3>
+<h3>画像を入れてクレメンス</h3>
 
 <div class="input-group">
-  背景画像: <input type="file" id="backgroundInput" accept="image/*">
+  背景: <input type="file" id="backgroundInput" accept="image/*">
 </div>
 <div class="input-group">
-  キャラ画像: <input type="file" id="charaInput" accept="image/*">
+  立ち絵: <input type="file" id="charaInput" accept="image/*">
 </div>
 <div class="input-group">
-  <label for="numberInput">枠の色を調整:</label>
-  <input type="number" id="numberInput" class="number-box" placeholder="適当な数値を入れてください">
+  <label for="hueInput">枠の色を調整(適当な数値を入力):</label>
+  <input type="number" id="hueInput" class="number-box" value="0">
 </div>
 
-
-<div id="canvas-container"></div>
-<button id="downloadBtn">画像を保存</button>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<canvas id="thumbCanvas" width="1280" height="720"></canvas>
+<!-- <button id="saveBtn">画像を保存</button> -->
 
 <script>
-  const container = document.getElementById('canvas-container');
+const canvas = document.getElementById('thumbCanvas');
+const ctx = canvas.getContext('2d');
+
+let bgImage = null;
+let charaImage = null;
+let hueValue = 0;
+
+// 枠・ライブ画像
+const frameImage = new Image();
+frameImage.src = 'img/枠.png';
+
+const liveImage = new Image();
+liveImage.src = 'img/ライブ.png';
+
+let frameLoaded = false;
+let liveLoaded = false;
+
+frameImage.onload = () => {
+  frameLoaded = true;
+  drawAll();
+};
+
+liveImage.onload = () => {
+  liveLoaded = true;
+  drawAll();
+};
+
+window.addEventListener('load', () => {
+  drawAll();
+});
+
+function drawAll() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (bgImage) {
+    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+  } else {
+    ctx.fillStyle = '#eee';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  if (charaImage) {
+    const charaWidth = 600;
+    const charaHeight = 600;
+    const x = -100;
+    const y = canvas.height - charaHeight + (charaHeight/8);
+    ctx.drawImage(charaImage, x, y, charaWidth, charaHeight);
+  }
+
+  if (frameLoaded) {
+    ctx.save();
+    ctx.filter = `hue-rotate(${hueValue}deg)`;
+    ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  }
+
+  if (liveLoaded) {
+    ctx.drawImage(liveImage, 0, 0, canvas.width, canvas.height);
+  }
+}
+
+
+document.getElementById('backgroundInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = new Image();
+  img.onload = () => {
+    bgImage = img;
+    drawAll();
+  };
+  img.src = URL.createObjectURL(file);
+});
+
+document.getElementById('charaInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = new Image();
+  img.onload = () => {
+    charaImage = img;
+    drawAll();
+  };
+  img.src = URL.createObjectURL(file);
+});
+
+document.getElementById('hueInput').addEventListener('input', () => {
+  hueValue = parseInt(document.getElementById('hueInput').value) || 0;
+  drawAll();
+});
+
+function drawAll() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 背景
+  if (bgImage) {
+    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+  } else {
+    ctx.fillStyle = '#eee';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  // キャラ
+  if (charaImage) {
+    const charaWidth = 600;
+    const charaHeight = 600;
+    const x = -100;
+    const y = canvas.height - charaHeight + (charaHeight/8);
+    ctx.drawImage(charaImage, x, y, charaWidth, charaHeight);
+  }
 
   // 枠
-  const frameImg = new Image();
-  frameImg.src = 'img/枠.png';
-  frameImg.className = 'layered-image frame-image frame-image-instance';
-  container.appendChild(frameImg);
+  if (frameImage.complete) {
+    ctx.save();
+    ctx.filter = `hue-rotate(${hueValue}deg)`;
+    ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  }
 
   // ライブ
-  const liveImg = new Image();
-  liveImg.src = 'img/ライブ.png';
-  liveImg.className = 'layered-image live-image';
-  container.appendChild(liveImg);
-
-  // 背景差し替え
-  document.getElementById('backgroundInput').addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    removeExistingImage('base-image');
-
-    const img = new Image();
-    img.onload = () => {
-      img.className = 'layered-image base-image';
-      container.appendChild(img);
-    };
-    img.src = URL.createObjectURL(file);
-  });
-
-  // キャラ画像差し替え
-  document.getElementById('charaInput').addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    removeExistingImage('chara-image');
-
-    const img = new Image();
-    img.onload = () => {
-      img.className = 'layered-image chara-image';
-      img.style.left = '-100px';
-      img.style.top = `${720 - img.naturalHeight - 100}px`;
-      container.appendChild(img);
-    };
-    img.src = URL.createObjectURL(file);
-  });
-
-  // 枠色変更
-  const numberInput = document.getElementById('numberInput');
-  numberInput.addEventListener('input', () => {
-    const hue = parseInt(numberInput.value) || 0;
-    const frame = document.querySelector('.frame-image-instance');
-    if (frame) {
-      frame.style.filter = `hue-rotate(${hue}deg)`;
-    }
-  });
-
-  // 同じクラスの画像を削除
-  function removeExistingImage(className) {
-    const existing = container.querySelector(`.${className}`);
-    if (existing) {
-      container.removeChild(existing);
-    }
+  if (liveImage.complete) {
+    ctx.drawImage(liveImage, 0, 0, canvas.width, canvas.height);
   }
-document.getElementById('downloadBtn').addEventListener('click', () => {
-  html2canvas(container).then(canvas => {
-    const link = document.createElement('a');
-    link.download = 'thumbnail.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  });
+}
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.download = 'thumbnail.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
 });
 </script>
 
