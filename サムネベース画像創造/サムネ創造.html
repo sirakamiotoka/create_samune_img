@@ -81,9 +81,15 @@
     return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
   }
 
-  // スマホならプレビュー画像表示、PCは非表示に
+  // スマホならプレビュー画像表示、キャンバス非表示に、PCはその逆に
   function updateUIByDevice() {
-    previewImage.style.display = isMobile() ? 'block' : 'none';
+    if (isMobile()) {
+      previewImage.style.display = 'block';
+      canvas.style.display = 'none';
+    } else {
+      previewImage.style.display = 'none';
+      canvas.style.display = 'block';
+    }
   }
 
   window.addEventListener('load', () => {
