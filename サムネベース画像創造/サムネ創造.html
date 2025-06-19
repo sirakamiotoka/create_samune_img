@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>あなたが頼りです。</title>
   <style>
     body {
@@ -10,6 +10,8 @@
     canvas {
       border: 1px solid #ccc;
       display: block;
+      max-width: 100%;
+      height: auto;
     }
     .number-box {
       width: 200px;
@@ -20,6 +22,11 @@
     .input-group {
       margin-bottom: 10px;
     }
+    #previewImage {
+      max-width: 100%;
+      margin-top: 10px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -27,149 +34,128 @@
 <h3>↓画像を入れてクレメンス↓</h3>
 
 <div class="input-group">
-  背景: <input type="file" id="backgroundInput" accept="image/*">
+  背景: <input type="file" id="backgroundInput" accept="image/*" />
 </div>
 <div class="input-group">
-  立ち絵: <input type="file" id="charaInput" accept="image/*">
+  立ち絵: <input type="file" id="charaInput" accept="image/*" />
 </div>
 <div class="input-group">
-  <label for="hueInput">枠の色を調整(適当な数値を入力):</label>
-  <input type="number" id="hueInput" class="number-box" value="0">
+  <label for="hueInput">枠の色を調整(任意で適当な数値を入力):</label>
+  <input type="number" id="hueInput" class="number-box" value="0" />
 </div>
 
 <canvas id="thumbCanvas" width="1280" height="720"></canvas>
-<!-- <button id="saveBtn">画像を保存</button> -->
+<img id="previewImage" alt="プレビュー画像" />
 
 <script>
-const canvas = document.getElementById('thumbCanvas');
-const ctx = canvas.getContext('2d');
+  const canvas = document.getElementById('thumbCanvas');
+  const ctx = canvas.getContext('2d');
+  const previewImage = document.getElementById('previewImage');
 
-let bgImage = null;
-let charaImage = null;
-let hueValue = 0;
+  let bgImage = null;
+  let charaImage = null;
+  let hueValue = 0;
 
-// 枠・ライブ画像
-const frameImage = new Image();
-frameImage.src = 'img/枠.png';
+  // 枠・ライブ画像
+  const frameImage = new Image();
+  frameImage.src = 'img/枠.png';
 
-const liveImage = new Image();
-liveImage.src = 'img/ライブ.png';
+  const liveImage = new Image();
+  liveImage.src = 'img/ライブ.png';
 
-let frameLoaded = false;
-let liveLoaded = false;
+  let frameLoaded = false;
+  let liveLoaded = false;
 
-frameImage.onload = () => {
-  frameLoaded = true;
-  drawAll();
-};
-
-liveImage.onload = () => {
-  liveLoaded = true;
-  drawAll();
-};
-
-window.addEventListener('load', () => {
-  drawAll();
-});
-
-function drawAll() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (bgImage) {
-    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-  } else {
-    ctx.fillStyle = '#eee';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-
-  if (charaImage) {
-    const charaWidth = 600;
-    const charaHeight = 600;
-    const x = -100;
-    const y = canvas.height - charaHeight + (charaHeight/8);
-    ctx.drawImage(charaImage, x, y, charaWidth, charaHeight);
-  }
-
-  if (frameLoaded) {
-    ctx.save();
-    ctx.filter = `hue-rotate(${hueValue}deg)`;
-    ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
-    ctx.restore();
-  }
-
-  if (liveLoaded) {
-    ctx.drawImage(liveImage, 0, 0, canvas.width, canvas.height);
-  }
-}
-
-
-document.getElementById('backgroundInput').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const img = new Image();
-  img.onload = () => {
-    bgImage = img;
+  frameImage.onload = () => {
+    frameLoaded = true;
     drawAll();
   };
-  img.src = URL.createObjectURL(file);
-});
 
-document.getElementById('charaInput').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const img = new Image();
-  img.onload = () => {
-    charaImage = img;
+  liveImage.onload = () => {
+    liveLoaded = true;
     drawAll();
   };
-  img.src = URL.createObjectURL(file);
-});
 
-document.getElementById('hueInput').addEventListener('input', () => {
-  hueValue = parseInt(document.getElementById('hueInput').value) || 0;
-  drawAll();
-});
-
-function drawAll() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // 背景
-  if (bgImage) {
-    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-  } else {
-    ctx.fillStyle = '#eee';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // スマホか判定
+  function isMobile() {
+    return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
   }
 
-  // キャラ
-  if (charaImage) {
-    const charaWidth = 600;
-    const charaHeight = 600;
-    const x = -100;
-    const y = canvas.height - charaHeight + (charaHeight/8);
-    ctx.drawImage(charaImage, x, y, charaWidth, charaHeight);
+  // スマホならプレビュー画像表示、PCは非表示に
+  function updateUIByDevice() {
+    previewImage.style.display = isMobile() ? 'block' : 'none';
   }
 
-  // 枠
-  if (frameImage.complete) {
-    ctx.save();
-    ctx.filter = `hue-rotate(${hueValue}deg)`;
-    ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
-    ctx.restore();
+  window.addEventListener('load', () => {
+    updateUIByDevice();
+    drawAll();
+  });
+
+  function drawAll() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (bgImage) {
+      ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.fillStyle = '#eee';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    if (charaImage) {
+      const charaWidth = 600;
+      const charaHeight = 600;
+      const x = -100;
+      const y = canvas.height - charaHeight + (charaHeight / 8);
+      ctx.drawImage(charaImage, x, y, charaWidth, charaHeight);
+    }
+
+    if (frameLoaded) {
+      ctx.save();
+      ctx.filter = `hue-rotate(${hueValue}deg)`;
+      ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+      ctx.restore();
+    }
+
+    if (liveLoaded) {
+      ctx.drawImage(liveImage, 0, 0, canvas.width, canvas.height);
+    }
+
+    updatePreview();
   }
 
-  // ライブ
-  if (liveImage.complete) {
-    ctx.drawImage(liveImage, 0, 0, canvas.width, canvas.height);
+  // プレビュー画像を更新
+  function updatePreview() {
+    if (isMobile()) {
+      previewImage.src = canvas.toDataURL('image/png');
+    }
   }
-}
 
-document.getElementById('saveBtn').addEventListener('click', () => {
-  const link = document.createElement('a');
-  link.download = 'thumbnail.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-});
+  document.getElementById('backgroundInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = new Image();
+    img.onload = () => {
+      bgImage = img;
+      drawAll();
+    };
+    img.src = URL.createObjectURL(file);
+  });
+
+  document.getElementById('charaInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = new Image();
+    img.onload = () => {
+      charaImage = img;
+      drawAll();
+    };
+    img.src = URL.createObjectURL(file);
+  });
+
+  document.getElementById('hueInput').addEventListener('input', () => {
+    hueValue = parseInt(document.getElementById('hueInput').value) || 0;
+    drawAll();
+  });
 </script>
 
 </body>
