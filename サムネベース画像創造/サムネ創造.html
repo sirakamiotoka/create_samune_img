@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <title>あなたが頼りです。</title>
   <style>
+@font-face {
+  font-family: 'GenEiMGothic';
+  src: url('GenEiMGothic2-Heavy.ttf') format('truetype');
+}
     body {
       font-family: sans-serif;
     }
@@ -150,7 +154,8 @@
     // 文字
     if (overlayText) {
   ctx.save();
-  ctx.font = 'bold 85px "Arial Black", "Impact", "BIZ UDゴシック", "Yu Gothic", sans-serif';
+  ctx.font = '85px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif';
+
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillStyle = '#ffffff';
@@ -158,7 +163,7 @@
 
   const textX = canvas.width / 2 - 183;
   const textY = 230;
-
+  ctx.scale(1, 1.05);
   ctx.translate(textX, textY);
   ctx.lineWidth = 8;
   ctx.strokeText(overlayText, 0, 0);
@@ -171,10 +176,11 @@
     if (overlayTextmain) {
   ctx.save();
   let fontSize = 152;
-  ctx.font = `bold ${fontSize}px "Impact", "BIZ UDゴシック", "Yu Gothic", sans-serif';
-  while (ctx.measureText(overlayTextmain).width > canvas.width * 0.65 && fontSize > 100) {
-    fontSize -= 13;
-    ctx.font = `bold ${fontSize}px "Impact", "Arial Black", sans-serif`;
+  ctx.font = '152px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif';
+  while (ctx.measureText(overlayTextmain).width > canvas.width * 0.65 && fontSize > 130) {
+    fontSize -= 12;
+    ctx.font = `bold ${fontSize}px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
+
   }
 
   ctx.textAlign = 'left';
@@ -184,8 +190,8 @@
   ctx.filter = `hue-rotate(${hueValue}deg)`;
 
   const textX = canvas.width / 2 - 170;
-  const textY = 360;
-
+  const textY = 330;
+  ctx.scale(1, 1.28);
   ctx.translate(textX, textY);
   ctx.lineWidth = 13;
   ctx.strokeText(overlayTextmain, 0, 0);
