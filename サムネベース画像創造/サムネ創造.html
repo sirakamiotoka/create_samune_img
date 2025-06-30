@@ -150,20 +150,26 @@
     // 文字
     if (overlayText) {
   ctx.save();
-  ctx.font = 'bold 85px "Impact", "Arial Black", sans-serif';
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
-  ctx.fillStyle = '#ffffff';
-  ctx.strokeStyle = '#000000';
+ctx.font = 'bold 85px "Impact", "Arial Black", sans-serif';
+ctx.textAlign = 'left';
+ctx.textBaseline = 'top';
+ctx.fillStyle = '#ffffff';
+ctx.strokeStyle = '#000000';
+ctx.lineWidth = 8;
 
-  const textX = canvas.width / 2 - 183;
-  const textY = 230;
+// ドロップシャドウ風に
+ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+ctx.shadowOffsetX = 4;
+ctx.shadowOffsetY = 4;
+ctx.shadowBlur = 4;
 
-  ctx.translate(textX, textY);
-  ctx.lineWidth = 8;
-  ctx.strokeText(overlayText, 0, 0);
-  ctx.fillText(overlayText, 0, 0);
-  ctx.restore();
+const textX = canvas.width / 2 - 183;
+const textY = 230;
+
+ctx.strokeText(overlayText, textX, textY);
+ctx.fillText(overlayText, textX, textY);
+ctx.restore();
+
 }
 
 
