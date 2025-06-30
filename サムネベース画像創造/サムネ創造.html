@@ -6,12 +6,10 @@
   <style>
 @font-face {
   font-family: 'GenEiMGothic';
-  src: url('https://sirakamiotoka.github.io/create_samune_img/サムネベース画像創造/GenEiMGothic2-Heavy.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+  src: url('GenEiMGothic2-Heavy.ttf') format('truetype');
 }
     body {
-  font-family: sans-serif;
+      font-family: sans-serif;
     }
     canvas {
       border: 1px solid #ccc;
@@ -73,6 +71,7 @@
   let charaCropped = null;
   let hueValue = 0;
   let overlayText = "";
+  let overlayTextmain = "";
 
   const frameImage = new Image();
   frameImage.src = 'img/枠.png';
@@ -99,19 +98,20 @@
 
   function updateUIByDevice() {
     if (isMobile()) {
-      canvas.style.display = 'block';
+      canvas.style.display = 'none';
     previewImage.style.display = 'block';
     
   } else {
     canvas.style.display = 'block';
-    previewImage.style.display = 'block';
+    previewImage.style.display = 'none';
   }
   }
 
   window.addEventListener('load', () => {
-    drawAll();
-    updateUIByDevice();
-    
+
+   
+  updateUIByDevice();
+  drawAll();
   });
 
   function drawAll() {
