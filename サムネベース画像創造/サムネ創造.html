@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>あなたが頼りです。</title>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+
+
   <style>
 @font-face {
   font-family: 'GenEiMGothic';
@@ -164,16 +167,21 @@
     // 文字
     if (overlayText) {
   ctx.save();
-  ctx.font = '85px "M PLUS 1p", "Impact", "Yu Gothic", "Meiryo", sans-serif';
+  ctx.font = '90px "Noto Sans JP", "Impact", "Yu Gothic", "Meiryo", sans-serif';
 
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
+
+ ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetX = 4;
+  ctx.shadowOffsetY = 4;
   ctx.fillStyle = '#ffffff';
   ctx.strokeStyle = '#000000';
 
   const textX = canvas.width / 2 - 183;
   const textY = 230;
-  ctx.scale(1, 1.05);
+  ctx.scale(1, 1.11);
   ctx.translate(textX, textY);
   ctx.lineWidth = 8;
   ctx.strokeText(overlayText, 0, 0);
@@ -186,22 +194,26 @@
     if (overlayTextmain) {
   ctx.save();
   let fontSize = 152;
-  ctx.font = '152px "M PLUS 1p", "Impact", "Yu Gothic", "Meiryo", sans-serif';
+  ctx.font = '159px "Noto Sans JP", "Impact", "Yu Gothic", "Meiryo", sans-serif';
   while (ctx.measureText(overlayTextmain).width > canvas.width * 0.65 && fontSize > 114) {
     fontSize -= 10;
-    ctx.font = `bold ${fontSize}px "M PLUS 1p", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
+    ctx.font = `bold ${fontSize}px "Noto Sans JP", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
 
   }
-　ctx.font = `bold ${fontSize}px "M PLUS 1p", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
+　ctx.font = `bold ${fontSize}px "Noto Sans JP", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
+ ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetX = 4;
+  ctx.shadowOffsetY = 4;
   ctx.fillStyle = '#f0ff0f';
   ctx.strokeStyle = '#000000';
   ctx.filter = `hue-rotate(${hueValue}deg)`;
 
   const textX = canvas.width / 2 - 170;
-  const textY = 330;
-  ctx.scale(1, 1.28);
+  const textY = 300;
+  ctx.scale(1, 1.3);
   ctx.translate(textX, textY);
   ctx.lineWidth = 13;
   ctx.strokeText(overlayTextmain, 0, 0);
