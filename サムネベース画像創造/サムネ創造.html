@@ -3,10 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <title>あなたが頼りです。</title>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p&display=swap" rel="stylesheet">
   <style>
 @font-face {
   font-family: 'GenEiMGothic';
-  src: url('font/GenEiMGothic2-Heavy.ttf') format('truetype');
+  src: url('font/GenEiMGothic2-Heavy.woff2') format('woff2'),
+       url('font/GenEiMGothic2-Heavy.woff') format('woff'),
+       url('font/GenEiMGothic2-Heavy.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
     body {
       font-family: sans-serif;
@@ -100,7 +106,7 @@
 
   function updateUIByDevice() {
     if (isMobile()) {
-      canvas.style.display = 'block';
+      canvas.style.display = 'none';
     previewImage.style.display = 'block';
     
   } else {
@@ -158,7 +164,7 @@
     // 文字
     if (overlayText) {
   ctx.save();
-  ctx.font = '85px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif';
+  ctx.font = '85px "M PLUS 1p", "Impact", "Yu Gothic", "Meiryo", sans-serif';
 
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
@@ -180,13 +186,13 @@
     if (overlayTextmain) {
   ctx.save();
   let fontSize = 152;
-  ctx.font = '152px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif';
+  ctx.font = '152px "M PLUS 1p", "Impact", "Yu Gothic", "Meiryo", sans-serif';
   while (ctx.measureText(overlayTextmain).width > canvas.width * 0.65 && fontSize > 114) {
     fontSize -= 10;
-    ctx.font = `bold ${fontSize}px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
+    ctx.font = `bold ${fontSize}px "M PLUS 1p", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
 
   }
-　ctx.font = `bold ${fontSize}px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
+　ctx.font = `bold ${fontSize}px "M PLUS 1p", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillStyle = '#f0ff0f';
