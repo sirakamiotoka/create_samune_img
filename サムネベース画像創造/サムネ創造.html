@@ -93,9 +93,11 @@
 
   function updateUIByDevice() {
     if (isMobile()) {
+      canvas.style.display = 'none';
       previewImage.style.display = 'block';
     } else {
-      previewImage.style.display = 'none';
+      canvas.style.display = 'block';
+    previewImage.style.display = 'none';
     }
   }
 
@@ -151,7 +153,8 @@
       ctx.textBaseline = 'top';
       ctx.fillStyle = '#ffffff';
       ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 8;
+      const scaleY = 1.3;
+      ctx.lineWidth = 8 / scaleY;
       const textX = canvas.width / 2 - 183;
       const textY = 230;
 ctx.translate(textX, textY);        
@@ -175,7 +178,8 @@ ctx.translate(textX, textY);
       ctx.fillStyle = '#f0ff0f';
       ctx.strokeStyle = '#000000';
       ctx.filter = `hue-rotate(${hueValue}deg)`;
-      ctx.lineWidth = 13;
+      const scaleY = 1.3;
+      ctx.lineWidth = 13 / scaleY;
       const textX = canvas.width / 2 -170;
       const textY = 360;
 ctx.translate(textX, textY);        
