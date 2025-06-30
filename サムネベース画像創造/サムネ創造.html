@@ -74,9 +74,11 @@
   let overlayTextmain = "";
 
   const frameImage = new Image();
+　frameImage.crossOrigin = 'anonymous';
   frameImage.src = 'img/枠.png';
 
   const liveImage = new Image();
+　liveImage.crossOrigin = 'anonymous';
   liveImage.src = 'img/ライブ.png';
 
   let frameLoaded = false;
@@ -103,7 +105,7 @@
     
   } else {
     canvas.style.display = 'block';
-    previewImage.style.display = 'none';
+    previewImage.style.display = 'block';
   }
   }
 
@@ -206,9 +208,11 @@
   }
 
  function updatePreview() {
-  if (isMobile()) {
-    previewImage.src = canvas.toDataURL('image/png');
-  }
+previewImage.src = canvas.toDataURL('image/png');
+previewImage.style.display = 'block';
+  //if (isMobile()) {
+  //  previewImage.src = canvas.toDataURL('image/png');
+  //}
 }
 
 
