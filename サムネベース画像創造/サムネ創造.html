@@ -190,7 +190,7 @@ ctx.translate(textX, textY);
       ctx.restore();
     }
 
-    updatePreview();
+    
   }
 
  function updatePreview() {
@@ -207,6 +207,7 @@ ctx.translate(textX, textY);
     img.onload = () => {
       bgImage = img;
       drawAll();
+      updatePreview();
     };
     img.src = URL.createObjectURL(file);
   });
@@ -254,6 +255,7 @@ ctx.translate(textX, textY);
       croppedImg.onload = () => {
         charaCropped = croppedImg;
         drawAll();
+        updatePreview();
       };
       croppedImg.src = croppedCanvas.toDataURL();
     };
