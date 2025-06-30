@@ -177,12 +177,12 @@
   ctx.save();
   let fontSize = 152;
   ctx.font = '152px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif';
-  while (ctx.measureText(overlayTextmain).width > canvas.width * 0.65 && fontSize > 130) {
+  while (ctx.measureText(overlayTextmain).width > canvas.width * 0.65 && fontSize > 100) {
     fontSize -= 12;
     ctx.font = `bold ${fontSize}px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
 
   }
-　ctx.font = `bold ${fontSize}px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif
+　ctx.font = `bold ${fontSize}px "GenEiMGothic", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillStyle = '#f0ff0f';
