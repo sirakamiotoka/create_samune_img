@@ -208,11 +208,9 @@
   }
 
  function updatePreview() {
-previewImage.src = canvas.toDataURL('image/png');
-previewImage.style.display = 'block';
-  //if (isMobile()) {
-  //  previewImage.src = canvas.toDataURL('image/png');
-  //}
+  if (isMobile()) {
+    previewImage.src = canvas.toDataURL('image/png');
+  }
 }
 
 
