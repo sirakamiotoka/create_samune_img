@@ -93,10 +93,12 @@
 
   function updateUIByDevice() {
     if (isMobile()) {
-      previewImage.style.display = 'block';
-    } else {
-      previewImage.style.display = 'none';
-    }
+    canvas.style.display = 'none';
+    previewImage.style.display = 'block';
+  } else {
+    canvas.style.display = 'block';
+    previewImage.style.display = 'none';
+  }
   }
 
   window.addEventListener('load', () => {
@@ -191,11 +193,12 @@ ctx.translate(textX, textY);
     updatePreview();
   }
 
-  function updatePreview() {
-    if (isMobile()) {
-      previewImage.src = canvas.toDataURL('image/png');
-    }
+ function updatePreview() {
+  if (isMobile()) {
+    previewImage.src = canvas.toDataURL('image/png');
   }
+}
+
 
   document.getElementById('backgroundInput').addEventListener('change', (e) => {
     const file = e.target.files[0];
