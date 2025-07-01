@@ -67,6 +67,12 @@
   <label for="textInput">メイン文字を入力（ゲーム名など）:</label>
   <input type="text" id="textmainInput" class="text-box" placeholder="例：ランクマッチ" />
 </div>
+<div class="input-group">
+  <label>
+    <input type="checkbox" id="liveToggle" checked />
+    LIVE配信用
+  </label>
+</div>
 
 <canvas id="thumbCanvas" width="1280" height="720"></canvas>
 <img id="previewImage" alt="プレビュー画像" />
@@ -81,6 +87,11 @@
   let hueValue = 0;
   let overlayText = "";
   let overlayTextmain = "";
+  let showLive = true;
+document.getElementById('liveToggle').addEventListener('change', (e) => {
+  showLive = e.target.checked;
+  drawAll();
+});
 
   const frameImage = new Image();
 　frameImage.crossOrigin = 'anonymous';
@@ -160,9 +171,10 @@
       ctx.drawImage(charaCropped, x, y, drawWidth, drawHeight);
     }
 
-    if (liveLoaded) {
-      ctx.drawImage(liveImage, 0, 0, canvas.width, canvas.height);
+    if (liveLoaded && showLive) {
+    ctx.drawImage(liveImage, 0, 0, canvas.width, canvas.height);
     }
+
 
     // 文字
     if (overlayText) {
