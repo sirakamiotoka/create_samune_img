@@ -68,6 +68,10 @@
   <input type="text" id="textmainInput" class="text-box" placeholder="例：ランクマッチ" />
 </div>
 <div class="input-group">
+  <label for="textInput">企画名等を入力（５連勝するまで！など）:</label>
+  <input type="text" id="textprojInput" class="text-box" placeholder="例：クリアまで耐久" />
+</div>
+<div class="input-group">
   <label>
     <input type="checkbox" id="liveToggle" checked />
     LIVE配信用
@@ -87,6 +91,7 @@
   let hueValue = 0;
   let overlayText = "";
   let overlayTextmain = "";
+  let overlayTextproj = "";
   let showLive = true;
 document.getElementById('liveToggle').addEventListener('change', (e) => {
   showLive = e.target.checked;
@@ -224,12 +229,41 @@ document.getElementById('liveToggle').addEventListener('change', (e) => {
   ctx.filter = `hue-rotate(${hueValue}deg)`;
 
   const textX = canvas.width / 2 - 190;
-  const textY = 250;
+  const textY = 235;
   ctx.scale(1, 1.38);
   ctx.translate(textX, textY);
   ctx.lineWidth = 13;
   ctx.strokeText(overlayTextmain, 0, 0);
   ctx.fillText(overlayTextmain, 0, 0);
+  ctx.restore();
+}
+if (overlayTextproj) {
+  ctx.save();
+  let fontSize = 95;
+  ctx.font = '95px "Noto Sans JP", "Impact", "Yu Gothic", "Meiryo", sans-serif';
+  while (ctx.measureText(overlayTextproj).width > canvas.width * 0.65 && fontSize > 35) {
+    fontSize -= fontSize/10-5;
+    ctx.font = `bold ${fontSize}px "Noto Sans JP", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
+
+  }
+　ctx.font = `bold ${fontSize}px "Noto Sans JP", "Impact", "Yu Gothic", "Meiryo", sans-serif`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetX = 5;
+  ctx.shadowOffsetY = 5;
+  ctx.fillStyle = '#f0ff0f';
+  ctx.strokeStyle = '#000000';
+  ctx.filter = `hue-rotate(${hueValue - 30}deg)`;
+
+  const textX = canvas.width / 2 - 190;
+  const textY = 435;
+  ctx.scale(1, 1.3);
+  ctx.translate(textX, textY);
+  ctx.lineWidth = 13;
+  ctx.strokeText(overlayTextproj, 0, 0);
+  ctx.fillText(overlayTextproj, 0, 0);
   ctx.restore();
 }
 
@@ -317,12 +351,16 @@ document.getElementById('liveToggle').addEventListener('change', (e) => {
     drawAll();
     
   });
-  // メインテキスト入力
+  // メインタイトル入力
   document.getElementById('textmainInput').addEventListener('input', (e) => {
     overlayTextmain = e.target.value;
     drawAll();
   });
-  
+  // 企画名等入力
+  document.getElementById('textprojInput').addEventListener('input', (e) => {
+    overlayTextproj = e.target.value;
+    drawAll();
+  });
 </script>
 
 </body>
